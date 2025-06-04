@@ -33,6 +33,7 @@ if __name__ == "__main__":
     parser.add_argument("--videos", type=str, default=None, help="Video files to process")
     parser.add_argument("--fov", type=float, default=0, help="Field of view for the 3D pose estimation")
     parser.add_argument("--type", type=str, default="nlf", choices=["multihmr", "nlf"], help="Type of 3D pose estimation to use")
+    parser.add_argument("--merging", type=str, default="geometric3", choices=["learning", "geometric3"], help="Merging method for the 3D pose estimation")
     parser.add_argument("--depthestimator", type=str, default="moge", choices=["vda", "moge"], help="Type of depth estimation to use")
     parser.add_argument("--rbfkernel", type=str, default="linear", choices=["linear", "multiquadric", "univariatespline"], help="RBF kernel to use for the 3D pose estimation filtering")
     parser.add_argument("--rbfsmooth", type=float, default=-1, help="Smoothness for the RBF kernel")
@@ -274,8 +275,14 @@ if __name__ == "__main__":
             pose_pkl_list += output_type_pkls[i] + ","
         # pose_pkl_list = "../results/final/2/nlfc01.pkl,../results/final/2/nlfc02.pkl,../results/final/2/nlfc03.pkl"
         pose_pkl_list = pose_pkl_list[:-1]
-        command_poseMerging = "python mergeLearning.py --pose_pkl_list " + pose_pkl_list + " --camera_setting_file " + camera_file + " --out_pkl " + output_type_pkl_merged
-        print("Merging poses estimations...") 
+        if args.merging == "geometric3":
+            command_poseMerging = "python mergeRotated.py --ref " + output_type_pkls[0] + " --extra1 " + output_type_pkls[1] + " --extra2 " + output_type_pkls[2] + " --output " + output_type_pkl_merged + " --cam_settings " + camera_file + " --cam_ref " + cam_nrs[0] + " --cam_extra1 " + cam_nrs[1] + " --cam_extra2 " + cam_nrs[2]
+            print("Merging poses estimations with geometric method...")
+        elif args.merging == "learning":
+            command_poseMerging = "python mergeLearning.py --pose_pkl_list " + pose_pkl_list + " --camera_setting_file " + camera_file + " --out_pkl " + output_type_pkl_merged
+            print("Merging poses estimations with learning method...")
+        else:
+            print("Unknown merging method: ", args.merging)
         print(command_poseMerging)
         result = subprocess.run(command_poseMerging, shell=True)
         if result.returncode != 0:

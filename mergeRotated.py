@@ -24,7 +24,7 @@ if __name__ == "__main__":
     parser.add_argument("--extra1", type=str, default='')
     parser.add_argument("--extra2", type=str, default='')
     parser.add_argument("--output", type=str, default='')
-    # parser.add_argument("--cam_settings", type=str, default='setting1')
+    parser.add_argument("--cam_settings", type=str, default='setting1')
     parser.add_argument("--cam_ref", type=str, default='c01')
     parser.add_argument("--cam_extra1", type=str, default='c02')
     parser.add_argument("--cam_extra2", type=str, default='c03')
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     extra1_pkl = args.extra1
     extra2_pkl = args.extra2
     output_pkl = args.output
-    # cam_settings = args.cam_settings
+    cam_settings = args.cam_settings
     cam_ref = args.cam_ref
     cam_x1 = args.cam_extra1
     cam_x2 = args.cam_extra2
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # camera2_rotation = np.array(camera2_rotation)
 
     # camera_file= "/home/vl10550y/Desktop/3DClimber/Datasets/aist_plusplus_final/cameras/" + cam_settings + ".json"
-    camera_file = "../results/final/4/camera_settings.json"
+    camera_file = cam_settings
     with open(camera_file) as f:
         data = json.load(f)
         for i in range(len(data)):
