@@ -26,9 +26,23 @@ export MODELS_PATH="MODELS_DIR"
 Usage
 ------------
 
-Simple processing
+Multiview processing
 
 ```py
-python multiPersonProcessing.py --video ../videos/D0-21.mp4 --directory ../results/D0-21
+python multiPersonProcessingLouis_mast3r.py --videos path/to/center.mp4,path/to/left.mp4,path/to/right.mp4 --directory path/to/results/
 ```
 
+For the 3D reconstruction, simply run GLOMAP. Don't forget to include a frame from the camera used for pose estimation named "ref.jpg".
+Then convert the .bin files to .txt.
+
+Fusion
+
+```py
+python rotatePLY.py --images_txt path/to/images.txt --ply_file path/to/input.ply --output path/to/input_transformed.ply
+```
+
+Visualization
+
+```py
+python appVisualization.py path/to/pose.pkl --ply_file path/to/input_transformed.ply
+```
